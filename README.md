@@ -25,4 +25,8 @@ graph TD
     B -->|ETL Pipeline| C(PostgreSQL Warehouse)
     C -->|Analytics Layer| D[Predictive ML Model & Dashboard]
 
+# Affiliate ETL & Predictive Pipeline
+
+### 🚀 Key Features
+- ...
 ![Dashboard Preview](assets/dashboard_preview.png)
