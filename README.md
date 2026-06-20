@@ -20,7 +20,7 @@ This shift from reactive monthly reviews to proactive, daily optimizations drove
 
 ## Dashboard
 
-![Dashboard Preview](dashboard_preview.png)
+![Dashboard Preview](Dashboard.png)
 
 ---
 
