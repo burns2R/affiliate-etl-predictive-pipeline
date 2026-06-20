@@ -24,3 +24,5 @@ graph TD
     A[Partner Portals] -->|Data Ingestion| B(FastAPI Mock Servers)
     B -->|ETL Pipeline| C(PostgreSQL Warehouse)
     C -->|Analytics Layer| D[Predictive ML Model & Dashboard]
+
+![Dashboard Preview](assets/dashboard_preview.png)
