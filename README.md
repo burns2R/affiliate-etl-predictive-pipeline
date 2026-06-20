@@ -18,6 +18,12 @@ This shift from reactive monthly reviews to proactive, daily optimizations drove
 
 ---
 
+## Dashboard
+
+![Dashboard Preview](assets/dashboard_preview.png)
+
+---
+
 ## 🏗️ System Architecture
 ```mermaid
 graph TD
@@ -25,8 +31,3 @@ graph TD
     B -->|ETL Pipeline| C(PostgreSQL Warehouse)
     C -->|Analytics Layer| D[Predictive ML Model & Dashboard]
 
-# Affiliate ETL & Predictive Pipeline
-
-### 🚀 Key Features
-- ...
-![Dashboard Preview](assets/dashboard_preview.png)
