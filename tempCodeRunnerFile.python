@@ -1,0 +1,44 @@
+import os
+from pathlib import Path
+
+def patch_api_schema():
+    root_dir = Path(__file__).parent.resolve()
+    
+    # 1. Standard API (JSON) - Must return a LIST of dicts to work with pd.DataFrame(response.json())
+    standard_path = root_dir / "api_standard/main.py"
+    with open(standard_path, "w") as f:
+        f.write("""from fastapi import FastAPI
+app = FastAPI()
+@app.get("/data")
+def get_data():
+    return [
+        {"date": "2026-06-20", "campaign_id": 26406, "campaign_name": "Modern Campaign", "total_clicks": 150, "conversions": 10, "earnings": 250.50, "advertiser": "StandardNet"}
+    ]
+""")
+    print("✅ Patched api_standard/main.py with schema-compliant JSON")
+
+    # 2. Legacy API (XML) - Must return <row> tags to work with root.findall('.//row')
+    legacy_path = root_dir / "api_legacy/main.py"
+    with open(legacy_path, "w") as f:
+        f.write("""from fastapi import FastAPI, Response
+app = FastAPI()
+@app.get("/data")
+def get_data():
+    xml_content = '''<?xml version="1.0" encoding="UTF-8"?>
+    <root>
+        <row>
+            <date>2026-06-20</date>
+            <campaign_id>10882</campaign_id>
+            <campaign_name>Legacy Campaign</campaign_name>
+            <clicks>120</clicks>
+            <conversions>8</conversions>
+            <earnings>180.25</earnings>
+            <advertiser>LegacyCorp</advertiser>
+        </row>
+    </root>'''
+    return Response(content=xml_content, media_type="application/xml")
+""")
+    print("✅ Patched api_legacy/main.py with schema-compliant XML")
+
+if __name__ == "__main__":
+    patch_api_schema()

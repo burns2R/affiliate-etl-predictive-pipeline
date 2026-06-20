@@ -1,7 +1,6 @@
 # Master orchestration file containerizing APIs, ETL, and PostgreSQL
 
 # Master orchestration file containerizing APIs, ETL, and PostgreSQL
-version: '3.8'
 
 services:
   warehouse:

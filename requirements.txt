@@ -1,9 +1,16 @@
-# Python Data Stack Dependencies
-pandas==2.2.2
-numpy==1.26.4
-requests==2.32.3
-sqlalchemy==2.0.30
-psycopg2-binary==2.9.9
+# Web Frameworks
+fastapi
+uvicorn
+streamlit
 
-# API framework (Assuming your mock servers use Flask or FastAPI)
-flask==3.0.3
+# Data Processing
+pandas
+numpy
+
+# Database Connectivity
+sqlalchemy
+psycopg2-binary
+
+# Utilities
+requests
+python-dotenv

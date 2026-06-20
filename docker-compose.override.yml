@@ -1,0 +1,33 @@
+
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./dashboard/Dockerfile
+    container_name: analytics_dashboard
+    ports:
+      - "8501:8501"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@warehouse:5432/affiliate_warehouse
+    depends_on:
+      warehouse:
+        condition: service_healthy
+    restart: always
+
+  # Ensures underlying application builds find structural context if missing
+  api_standard:
+    build:
+      context: .
+      dockerfile: ./api_standard/Dockerfile
+  api_legacy:
+    build:
+      context: .
+      dockerfile: ./api_legacy/Dockerfile
+  etl:
+    build:
+      context: .
+      dockerfile: ./etl/Dockerfile
+  analytics:
+    build:
+      context: .
+      dockerfile: ./analytics/Dockerfile
