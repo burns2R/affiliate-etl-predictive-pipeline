@@ -1,1 +1,72 @@
 # Master orchestration file containerizing APIs, ETL, and PostgreSQL
+
+# Master orchestration file containerizing APIs, ETL, and PostgreSQL
+version: '3.8'
+
+services:
+  warehouse:
+    image: postgres:15-alpine
+    container_name: affiliate_warehouse
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: affiliate_warehouse
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./warehouse/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d affiliate_warehouse"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api_standard:
+    build:
+      context: .
+      dockerfile: ./api_standard/Dockerfile
+    container_name: api_standard
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+
+  api_legacy:
+    build:
+      context: .
+      dockerfile: ./api_legacy/Dockerfile
+    container_name: api_legacy
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+
+  etl:
+    build:
+      context: .
+      dockerfile: ./etl/Dockerfile
+    container_name: etl_pipeline
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@warehouse:5432/affiliate_warehouse
+      - API_STANDARD_URL=http://api_standard:5000/data
+      - API_LEGACY_URL=http://api_legacy:5001/data
+    depends_on:
+      warehouse:
+        condition: service_healthy
+      api_standard:
+        condition: service_started
+      api_legacy:
+        condition: service_started
+    command: ["python", "etl/pipeline.py"]
+
+  analytics:
+    build:
+      context: .
+      dockerfile: ./analytics/Dockerfile
+    container_name: analytics_engine
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@warehouse:5432/affiliate_warehouse
+    depends_on:
+      etl:
+        condition: service_completed_successfully
+    command: ["python", "analytics/predictive_model.py"]
