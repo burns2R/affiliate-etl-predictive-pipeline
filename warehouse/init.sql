@@ -1,0 +1,1 @@
+-- Relational database schema initialization for PostgreSQL
